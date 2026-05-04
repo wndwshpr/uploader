@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSUploader - Bulk Product Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="login-container">
+            <div class="logo">
+                <h1>WSUploader</h1>
+                <p>Bulk Product Management</p>
+            </div>
+            
+            <form id="login-form" class="form">
+                <button type="button" id="google-signin-btn" class="btn-google">
+                    <svg width="18" height="18" viewBox="0 0 18 18">
+                        <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+                        <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+                        <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
+                        <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+                
+                <div class="divider">or</div>
+                
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="login-email" required placeholder="your@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="btn-primary">Sign In</button>
+                
+                <div id="login-error" class="error-message"></div>
+                
+                <div style="text-align: center; margin-top: 16px;">
+                    <button type="button" id="clear-session-btn" class="btn-text" style="font-size: 12px; color: #999;">Clear cached session</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app-screen" class="screen">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>WSUploader</h1>
+                    <span id="store-name" class="store-badge"></span>
+                </div>
+                <div class="header-right">
+                    <button id="logout-btn" class="btn-text">Sign Out</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <button class="nav-item active" data-view="upload">Upload</button>
+            <button class="nav-item" data-view="products">Products</button>
+            <button class="nav-item" data-view="export">Export</button>
+        </nav>
+
+        <!-- Upload View -->
+        <div id="upload-view" class="view active">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Bulk Upload</h2>
+                    <p>Import products from CSV or Excel files</p>
+                </div>
+
+                <div class="upload-area" id="upload-area">
+                    <input type="file" id="file-input" accept=".csv,.xlsx,.xls" hidden>
+                    <div class="upload-content">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                        </svg>
+                        <h3>Drop file here or click to browse</h3>
+                        <p>Supports CSV and Excel files</p>
+                        <button type="button" class="btn-secondary" id="browse-btn">Browse Files</button>
+                    </div>
+                </div>
+
+                <div class="template-section">
+                    <button class="btn-text" id="download-template">↓ Download CSV Template</button>
+                </div>
+
+                <!-- Preview Table -->
+                <div id="preview-section" class="preview-section" style="display: none;">
+                    <div class="section-header">
+                        <h3>Preview</h3>
+                        <div class="preview-actions">
+                            <span id="preview-count"></span>
+                            <button class="btn-text" id="cancel-preview">Cancel</button>
+                            <button class="btn-primary" id="confirm-import">Import Products</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="preview-table" class="data-table">
+                            <thead id="preview-thead"></thead>
+                            <tbody id="preview-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products View -->
+        <div id="products-view" class="view">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Products</h2>
+                    <div class="header-actions">
+                        <input type="search" id="search-input" placeholder="Search products..." class="search-input">
+                        <button class="btn-secondary" id="bulk-edit-btn">Bulk Edit</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table id="products-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select-all"></th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Category</th>
+                                <th>Barcode</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-tbody">
+                            <tr><td colspan="7" class="loading">Loading products...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export View -->
+        <div id="export-view" class="view">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Export</h2>
+                    <p>Download your products as CSV</p>
+                </div>
+
+                <div class="export-card">
+                    <h3>Export All Products</h3>
+                    <p>Download a CSV file containing all your products</p>
+                    <button class="btn-primary" id="export-all-btn">Export to CSV</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Bulk Edit Modal -->
+    <div id="bulk-edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Bulk Edit</h3>
+                <button class="close-btn" id="close-bulk-edit">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="bulk-edit-count"></p>
+                <div class="form-group">
+                    <label>Update Price</label>
+                    <input type="number" id="bulk-price" step="0.01" placeholder="Leave empty to skip">
+                </div>
+                <div class="form-group">
+                    <label>Update Stock</label>
+                    <input type="number" id="bulk-stock" placeholder="Leave empty to skip">
+                </div>
+                <div class="form-group">
+                    <label>Update Category</label>
+                    <input type="text" id="bulk-category" placeholder="Leave empty to skip">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-text" id="cancel-bulk-edit">Cancel</button>
+                <button class="btn-primary" id="save-bulk-edit">Update Products</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="app.js?v=7"></script>
+</body>
+</html>
