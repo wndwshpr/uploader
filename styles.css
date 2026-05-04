@@ -304,6 +304,58 @@ body {
 }
 
 /* Upload Area */
+.instructions-card {
+    background: #FFF;
+    border: 1px solid #DDD;
+    padding: 24px;
+    margin-bottom: 32px;
+}
+
+.instructions-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.instructions-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.instruction-section h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 12px;
+}
+
+.instruction-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.instruction-section li {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+    padding-left: 16px;
+    position: relative;
+}
+
+.instruction-section li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #000;
+}
+
+.instruction-section li strong {
+    color: #000;
+    font-weight: 600;
+}
+
 .upload-area {
     background: #FFF;
     border: 2px dashed #DDD;
