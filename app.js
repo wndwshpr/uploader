@@ -159,15 +159,10 @@ async function handleLogin(e) {
 // Google Sign-In
 async function handleGoogleSignIn() {
     try {
-        // Detect the current URL for redirect
-        const redirectUrl = window.location.origin.includes('file://') 
-            ? 'http://localhost:8080' 
-            : window.location.origin;
-            
         const { error } = await sb.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: redirectUrl
+                redirectTo: 'https://wndwshpr.github.io/uploader'
             }
         });
         
